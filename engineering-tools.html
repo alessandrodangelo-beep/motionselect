@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>Engineering Selection Tools — MotionSelect</title>
+<meta name="description" content="Engineering selection tools for motion, automation, hydraulics and controls. Establish first-order values before comparing components, suppliers or architectures.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://motionselect.io/engineering-tools.html">
+<meta property="og:title" content="Engineering Selection Tools — MotionSelect">
+<meta property="og:description" content="Engineering selection tools for actuation, hydraulics and controls. Establish first-order values before comparing architectures, components or suppliers.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:#0c0c0d;
+    --panel:#131315;
+    --panel-hi:#16181b;
+    --line:#252b33;
+    --text:#f2f1ed;
+    --muted:#a8a8a4;
+    --dim:#686864;
+    --ghost:#3f4146;
+    --accent:#38bdf8;
+    --accent-hi:#60a5fa;
+    --signal:#d7f75b;
+    --signal-bg:rgba(215,247,91,.105);
+    --warn:#fbbf24;
+    --warn-bg:rgba(251,191,36,.09);
+    --red:#f87171;
+    --red-bg:rgba(248,113,113,.09);
+    --mono:'IBM Plex Mono', monospace;
+    --display:'Bebas Neue','Barlow Condensed',sans-serif;
+    --sans:Inter,'Helvetica Neue',Arial,sans-serif;
+    --mw:1040px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{background:radial-gradient(900px 420px at 78% 6%,rgba(56,189,248,.08),transparent 64%),radial-gradient(680px 360px at 88% 30%,rgba(215,247,91,.025),transparent 72%),var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.026;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:190px 190px}
+  a{color:inherit}
+  .nav-cta{background:var(--accent)!important;color:#050505!important;border:1px solid var(--accent)!important;padding:.52rem .82rem!important;font-weight:600}
+  .nav-cta:hover{background:var(--accent-hi)!important;border-color:var(--accent-hi)!important;color:#050505!important}
+
+  .hero{max-width:var(--mw);margin:0 auto;padding:86px 2rem 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:1.6rem;align-items:end}
+  .hero-tag{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.72rem;display:flex;align-items:center;gap:.55rem}
+  .hero-tag::before{content:"";width:18px;height:1px;background:var(--signal);box-shadow:0 0 10px rgba(215,247,91,.18)}
+  .hero h1{font-family:var(--display);font-size:clamp(2.85rem,5.8vw,5.15rem);font-weight:400;line-height:.9;letter-spacing:.045em;text-transform:uppercase;color:var(--text);margin:0 0 .72rem;max-width:680px}
+  .hero p{font-family:var(--mono);font-size:.82rem;line-height:1.75;color:var(--muted);max-width:660px}
+  .tools-status{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel-hi),var(--panel));padding:1rem 1.05rem;min-height:132px;display:flex;flex-direction:column;justify-content:center}
+  .tools-status-kicker{font-family:var(--mono);font-size:.58rem;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.42rem;display:block}
+  .tools-status p{font-family:var(--mono);font-size:.7rem;line-height:1.62;color:#777b80;margin:0}
+
+  .selector-wrap{max-width:var(--mw);margin:0 auto;padding:1rem 2rem 2.6rem}
+  .calc-tabs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--line);gap:1px;overflow:hidden}
+  .calc-tab{appearance:none;border:0;background:var(--panel);color:var(--muted);font-family:var(--mono);text-align:left;cursor:pointer;padding:1rem .95rem;transition:background .15s,color .15s,box-shadow .15s;min-height:76px}
+  .calc-tab .tab-num{display:block;font-size:.62rem;color:var(--ghost);letter-spacing:.12em;margin-bottom:.32rem}
+  .calc-tab .tab-label{display:block;font-size:.72rem;line-height:1.28;letter-spacing:.08em;text-transform:uppercase}
+  .calc-tab:hover{background:#171b20;color:var(--text)}
+  .calc-tab.active{background:rgba(56,189,248,.105);color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+  .calc-tab.active .tab-num{color:rgba(56,189,248,.55)}
+  .calc-body{border:1px solid var(--line);border-top:0;background:var(--line)}
+  .calc-panel{display:none}
+  .calc-panel.active{display:grid;grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);min-height:420px;background:var(--line)}
+  .panel-divider{background:var(--line)}
+  .inputs-col,.results-col{padding:1.8rem;background:var(--panel)}
+  .results-col{background:#0f1114}
+  .col-heading{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);padding-bottom:.9rem;border-bottom:1px solid var(--line);margin-bottom:1.35rem}
+  .field{margin-bottom:1.1rem}
+  .field label{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-bottom:.42rem;letter-spacing:.025em}
+  .field label .unit-label{font-size:.62rem;color:var(--ghost);text-transform:uppercase}
+  .field input[type=number],.field select{width:100%;background:#0f1012;border:1px solid var(--line);color:var(--text);font-family:var(--mono);font-size:.82rem;padding:.68rem .78rem;outline:0;border-radius:0;appearance:textfield;transition:border-color .15s,background .15s,box-shadow .15s}
+  .field input[type=number]::-webkit-inner-spin-button{display:none}
+  .field input[type=number]:focus,.field select:focus{border-color:rgba(56,189,248,.58);box-shadow:0 0 0 3px rgba(56,189,248,.08);background:#0b0c0e}
+  .field select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23686A64'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 12px) 50%;padding-right:28px}
+  .field .hint{font-family:var(--mono);font-size:.66rem;color:var(--ghost);margin-top:.36rem}
+  .result-item{margin-bottom:1.35rem}.result-item+.result-item{padding-top:1.35rem;border-top:1px solid var(--line)}
+  .result-key{font-family:var(--mono);font-size:.62rem;color:var(--ghost);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.44rem}
+  .result-val{font-family:var(--display);font-size:clamp(2.2rem,4vw,3.7rem);letter-spacing:.04em;font-weight:400;color:var(--text);line-height:.82;margin-bottom:.2rem}
+  .result-unit{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+  .result-note{font-family:var(--mono);font-size:.73rem;color:var(--muted);line-height:1.6;max-width:390px}
+
+  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-bottom:1.35rem}
+  .result-grid-cell{background:#0f1114;padding:.75rem .9rem}
+  .result-grid-cell .result-key{margin-bottom:.3rem}
+  .result-grid-cell .result-val{font-size:clamp(1.5rem,3vw,2.4rem)}
+  .assumptions{margin-top:1.65rem;padding-top:1.35rem;border-top:1px solid var(--line)}
+  .assumptions h3{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.72rem}
+  .assumptions ul{list-style:none}.assumptions li{font-family:var(--mono);font-size:.68rem;color:#686a64;margin-bottom:.35rem;padding-left:1rem;position:relative}.assumptions li::before{content:'—';position:absolute;left:0;color:var(--ghost)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:.32rem .62rem;letter-spacing:.06em;text-transform:uppercase}.badge-ok{background:var(--signal-bg);color:var(--signal);border:1px solid rgba(215,247,91,.34)}.badge-warn{background:var(--warn-bg);color:var(--warn);border:1px solid rgba(251,191,36,.26)}.badge-err{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,113,113,.28)}
+  .calc-footer{max-width:var(--mw);margin:0 auto;padding:1rem 2rem 2.6rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}.calc-footer p,.calc-footer a{font-family:var(--mono);font-size:.68rem;color:var(--dim);text-decoration:none}.calc-footer a{color:var(--accent);border-bottom:1px solid rgba(56,189,248,.28);padding-bottom:1px}.calc-footer a:hover{color:var(--accent-hi)}
+  .info-section,.cta-section{max-width:var(--mw);margin:0 auto;padding:2.8rem 2rem;border-top:1px solid var(--line)}
+  .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .info-block{background:var(--panel);padding:1.5rem}
+  .info-block h2,.cta-section h2{font-family:var(--display);font-size:clamp(2rem,3.8vw,3.35rem);font-weight:400;line-height:.92;letter-spacing:.04em;text-transform:uppercase;color:var(--text);margin-bottom:.85rem}
+  .info-block p,.cta-section p{font-family:var(--mono);font-size:.78rem;line-height:1.72;color:var(--muted);max-width:570px;margin-bottom:1rem}
+  .info-block ul{list-style:none;margin-top:1rem}.info-block li{font-family:var(--mono);font-size:.7rem;color:var(--dim);margin-bottom:.42rem;padding-left:1rem;position:relative}.info-block li::before{content:'—';position:absolute;left:0;color:var(--accent)}
+  .cta-section{padding-bottom:4rem}.cta-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#050505;font-family:var(--mono);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;text-decoration:none;padding:.82rem 1.15rem;border:1px solid var(--accent);font-weight:700}.cta-btn:hover{background:var(--accent-hi);border-color:var(--accent-hi)}
+  footer{border-top:1px solid var(--line);padding:1.6rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:#080808}footer span,footer a{font-family:var(--mono);font-size:.68rem;color:#5e6268;text-decoration:none}footer a:hover{color:var(--accent)}
+  .tool-categories{max-width:var(--mw);margin:0 auto;padding:0 2rem 1rem}
+  .tool-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .tool-category{background:var(--panel);padding:1rem 1.05rem;min-height:118px}
+  .tool-category span{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ghost);margin-bottom:.42rem}
+  .tool-category strong{display:block;font-family:var(--display);font-size:clamp(1.55rem,2.8vw,2.4rem);font-weight:400;line-height:.9;letter-spacing:.045em;text-transform:uppercase;color:var(--text);margin-bottom:.55rem}
+  .tool-category p{font-family:var(--mono);font-size:.68rem;line-height:1.58;color:var(--dim)}
+  .tool-category.is-active{background:linear-gradient(180deg,rgba(56,189,248,.10),var(--panel));box-shadow:inset 0 2px 0 var(--accent)}
+  .tool-category.is-active span{color:var(--accent)}
+  .tool-category.is-planned strong{color:#777b80}
+
+  @media(max-width:820px){.tool-categories{padding-left:1rem;padding-right:1rem}.tool-category-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;padding:82px 1rem 18px}.selector-wrap,.calc-footer,.info-section,.cta-section{padding-left:1rem;padding-right:1rem}.calc-tabs{grid-template-columns:1fr 1fr}.calc-panel.active{grid-template-columns:1fr}.panel-divider{height:1px;width:100%}.inputs-col,.results-col{padding:1.35rem}.info-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr}footer{padding:1.4rem 1rem}.hero h1{font-size:clamp(2.65rem,14vw,4.2rem)}}
+  @media(max-width:520px){.calc-tab{min-height:70px;padding:.85rem}.hero p{font-size:.77rem}.tools-status{min-height:auto}.result-val{font-size:2.45rem}.result-grid-cell .result-val{font-size:1.5rem}}
+
+
+  .tool-family{display:none;max-width:var(--mw);margin:0 auto}
+  .tool-family.active{display:block}
+  .tool-family .selector-wrap{padding-top:1rem}
+  .tool-category{border:0;text-align:left;cursor:pointer;font:inherit;width:100%}
+  .tool-category:hover:not(:disabled){background:#171b20}
+  .tool-category:disabled{cursor:default}
+  .tool-category:not(.is-active):not(.is-planned) strong{color:var(--text)}
+
+
+
+/* MotionSelect shared header — aligned with index/privacy */
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 2.5rem}
+.nav-wrap{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;background:rgba(12,12,13,.98);border-bottom:1px solid rgba(56,189,248,.20);box-shadow:0 1px 0 rgba(0,0,0,.6);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{display:flex;align-items:center;gap:.82rem;text-decoration:none;flex-shrink:0;color:var(--text)}
+.brand-mark{width:30px!important;height:30px!important;display:block;flex-shrink:0}
+.brand-name{font-family:var(--display);font-size:1.48rem!important;line-height:1;letter-spacing:.05em!important;text-transform:uppercase;color:var(--text);font-weight:400}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none;margin-left:auto}
+.nav-links a{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#666a70;text-decoration:none;padding:.38rem .65rem;transition:color .18s,background .18s}
+.nav-links a:hover{color:var(--text);background:rgba(56,189,248,.065)}
+.nav-links .nav-cta{background:var(--accent)!important;color:#050505!important;border:1px solid var(--accent)!important;padding:.52rem .82rem!important;margin-left:.4rem;font-weight:600;box-shadow:none!important}
+.nav-links .nav-cta:hover{background:var(--accent-hi)!important;border-color:var(--accent-hi)!important;color:#050505!important;transform:translateY(-1px)}
+.nav-burger{display:none;flex-direction:column;justify-content:space-between;width:22px;height:14px;background:none;border:none;cursor:pointer;padding:0}
+.nav-burger span{display:block;width:100%;height:1px;background:var(--text);transition:transform .25s,opacity .25s}
+.nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+@media(max-width:820px){.container{padding:0 1rem}.nav-burger{display:flex}.nav-links{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(12,12,13,.98);border-bottom:1px solid rgba(56,189,248,.20);flex-direction:column;align-items:stretch;padding:.6rem 1rem}.nav-links.open{display:flex}.nav-links a{padding:.7rem .4rem}.nav-links .nav-cta{display:inline-flex!important;align-self:flex-start;margin:.4rem 0 0 0!important}}
+@media(max-width:520px){.brand-name{font-size:1.28rem!important}.brand-mark{width:28px!important;height:28px!important}}
+
+</style>
+</head>
+<body>
+
+<header class="nav-wrap" id="navWrap">
+  <nav class="nav container">
+    <a href="index.html" class="nav-brand" aria-label="MotionSelect">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="11" height="11" rx="1.5" fill="#73CFFF"/>
+        <rect x="14" y="1" width="11" height="11" rx="1.5" fill="#6AA4C9"/>
+        <rect x="1" y="14" width="11" height="11" rx="1.5" fill="#486F8C"/>
+        <rect x="14" y="14" width="11" height="11" rx="1.5" fill="#314B60"/>
+      </svg>
+      <span class="brand-name">MotionSelect</span>
+    </a>
+    <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="engineering-tools.html">Tools</a></li>
+      <li><a href="index.html#request" class="nav-cta">Start application →</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <p class="hero-tag">// MS_TOOLS · Engineering Selection</p>
+    <h1>Engineering selection tools.</h1>
+    <p>Actuation, hydraulics and control tools for early-stage motion and automation decisions.</p>
+  </div>
+  <aside class="tools-status" aria-label="From calculation to selection">
+    <span class="tools-status-kicker">From calculation to selection</span>
+    <p>Numbers create the baseline. Context turns the baseline into a decision: duty cycle, mounting, environment, controls, supplier limits and integration risk.</p>
+  </aside>
+</section>
+
+<section class="tool-categories" aria-label="Tool categories">
+  <div class="tool-category-grid">
+    <button type="button" class="tool-category is-active" data-family-card="actuation" onclick="switchToolFamily('actuation')">
+      <span>01 · Active</span>
+      <strong>Actuation</strong>
+      <p>Cylinders, electric actuators, screws and baseline force / torque checks.</p>
+    </button>
+    <button type="button" class="tool-category" data-family-card="hydraulics" onclick="switchToolFamily('hydraulics')">
+      <span>02 · Active</span>
+      <strong>Hydraulics</strong>
+      <p>Pump flow, hydraulic power, pressure drop, valve sizing and accumulator tools.</p>
+    </button>
+    <button type="button" class="tool-category" data-family-card="controls" onclick="switchToolFamily('controls')">
+      <span>03 · Active</span>
+      <strong>Controls</strong>
+      <p>PLC I/O sizing, servo axis power, fieldbus cycle time and safety function tools.</p>
+    </button>
+  </div>
+</section>
+
+<div class="tool-family active" id="family-actuation" data-family="actuation">
+<div class="selector-wrap">
+  <div class="calc-tabs">
+    <button class="calc-tab active" onclick="switchFamilyTab('actuation', 0)">
+      <span class="tab-num">01</span>
+      <span class="tab-label">Pneumatic<br>Cylinder</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('actuation', 1)">
+      <span class="tab-num">02</span>
+      <span class="tab-label">Electric<br>Actuator</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('actuation', 2)">
+      <span class="tab-num">03</span>
+      <span class="tab-label">Hydraulic<br>Cylinder</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('actuation', 3)">
+      <span class="tab-num">04</span>
+      <span class="tab-label">Ball<br>Screw</span>
+    </button>
+  </div>
+
+  <div class="calc-body">
+    <div class="calc-panel active" id="actuation-panel-0">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Action type</label>
+          <select id="p-type" oninput="calcPneum()">
+            <option value="single">Single acting</option>
+            <option value="double" selected>Double acting</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Bore diameter <span class="unit-label">mm</span></label>
+          <input type="number" id="p-bore" value="80" min="6" max="320" step="1" oninput="calcPneum()">
+        </div>
+        <div class="field">
+          <label>Rod diameter <span class="unit-label">mm</span></label>
+          <input type="number" id="p-rod" value="25" min="4" max="160" step="1" oninput="calcPneum()">
+        </div>
+        <div class="field">
+          <label>Gauge pressure <span class="unit-label">bar</span></label>
+          <input type="number" id="p-press" value="6" min="1" max="16" step="0.1" oninput="calcPneum()">
+        </div>
+        <div class="field">
+          <label>Stroke <span class="unit-label">mm</span></label>
+          <input type="number" id="p-stroke" value="200" min="1" max="2000" step="1" oninput="calcPneum()">
+        </div>
+        <div class="field">
+          <label>Cycles per minute <span class="unit-label">c/min</span></label>
+          <input type="number" id="p-cycles" value="10" min="1" max="300" step="1" oninput="calcPneum()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Effective extension force</div>
+          <div class="result-val" id="p-force-ext">—</div>
+          <div class="result-unit">N · includes baseline 0.85 efficiency factor</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Effective retraction force</div>
+          <div class="result-val" id="p-force-ret">—</div>
+          <div class="result-unit">N · rod-side area for double acting cylinders</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Free air consumption</div>
+          <div class="result-val" id="p-air">—</div>
+          <div class="result-unit">Nl/min · approximate, based on absolute pressure</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Rod / bore ratio check</div>
+          <span class="badge badge-ok" id="p-check">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>spring force on single acting cylinders</li>
+            <li>pressure losses, cushioning and valve flow limits</li>
+            <li>buckling, side loads and mounting constraints</li>
+            <li>supplier-specific safety factors</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="actuation-panel-1">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Load mass <span class="unit-label">kg</span></label>
+          <input type="number" id="e-mass" value="50" min="0.1" max="5000" step="0.1" oninput="calcElectr()">
+        </div>
+        <div class="field">
+          <label>Friction coefficient µ</label>
+          <input type="number" id="e-mu" value="0.15" min="0.001" max="1" step="0.001" oninput="calcElectr()">
+          <p class="hint">Linear guide often 0.002–0.01 · sliding contact may be higher</p>
+        </div>
+        <div class="field">
+          <label>Target velocity <span class="unit-label">mm/s</span></label>
+          <input type="number" id="e-vel" value="500" min="1" max="5000" step="1" oninput="calcElectr()">
+        </div>
+        <div class="field">
+          <label>Acceleration <span class="unit-label">m/s²</span></label>
+          <input type="number" id="e-acc" value="5" min="0.1" max="50" step="0.1" oninput="calcElectr()">
+        </div>
+        <div class="field">
+          <label>Axis orientation</label>
+          <select id="e-orient" oninput="calcElectr()">
+            <option value="0">Horizontal (0°)</option>
+            <option value="30">Inclined 30°</option>
+            <option value="45">Inclined 45°</option>
+            <option value="90">Vertical (90°)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Transmission efficiency η</label>
+          <input type="number" id="e-eta" value="0.85" min="0.1" max="1" step="0.01" oninput="calcElectr()">
+        </div>
+        <div class="field">
+          <label>Design factor</label>
+          <input type="number" id="e-sf" value="1.5" min="1" max="5" step="0.1" oninput="calcElectr()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Acceleration force</div>
+          <div class="result-val" id="e-facc">—</div>
+          <div class="result-unit">N</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Peak linear force</div>
+          <div class="result-val" id="e-ftot">—</div>
+          <div class="result-unit">N · friction + gravity + acceleration</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Design linear force</div>
+          <div class="result-val" id="e-fdesign">—</div>
+          <div class="result-unit">N · includes design factor</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Baseline mechanical power</div>
+          <div class="result-val" id="e-pow">—</div>
+          <div class="result-unit">W · includes transmission efficiency and design factor</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Selection note</div>
+          <p class="result-note">Motor sizing still requires torque-speed curve, duty cycle, reflected inertia, transmission ratio, drive voltage, thermal limits and peak/RMS torque verification.</p>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>moving actuator mass and payload inertia</li>
+            <li>ballscrew, belt or gearbox ratio</li>
+            <li>motion profile shape and dwell time</li>
+            <li>servo drive limits and thermal derating</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="actuation-panel-2">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Bore diameter <span class="unit-label">mm</span></label>
+          <input type="number" id="h-bore" value="100" min="20" max="500" step="1" oninput="calcHydro()">
+        </div>
+        <div class="field">
+          <label>Rod diameter <span class="unit-label">mm</span></label>
+          <input type="number" id="h-rod" value="50" min="10" max="300" step="1" oninput="calcHydro()">
+        </div>
+        <div class="field">
+          <label>Operating pressure <span class="unit-label">bar</span></label>
+          <input type="number" id="h-press" value="200" min="10" max="700" step="5" oninput="calcHydro()">
+        </div>
+        <div class="field">
+          <label>Rod velocity <span class="unit-label">mm/s</span></label>
+          <input type="number" id="h-vel" value="100" min="1" max="1000" step="1" oninput="calcHydro()">
+        </div>
+        <div class="field">
+          <label>Hydraulic efficiency η</label>
+          <input type="number" id="h-eta" value="0.9" min="0.5" max="1" step="0.01" oninput="calcHydro()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Push force</div>
+          <div class="result-val" id="h-fpush">—</div>
+          <div class="result-unit">kN · cap-end area</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Pull force</div>
+          <div class="result-val" id="h-fpull">—</div>
+          <div class="result-unit">kN · annular rod-side area</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Required flow rate</div>
+          <div class="result-val" id="h-flow">—</div>
+          <div class="result-unit">l/min · push direction</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Hydraulic power</div>
+          <div class="result-val" id="h-pow">—</div>
+          <div class="result-unit">kW · adjusted for efficiency</div>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>pressure drops through valves, hoses and manifolds</li>
+            <li>buckling, column strength and end fixing</li>
+            <li>fluid temperature, leakage and duty cycle</li>
+            <li>shock loads and decompression effects</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="actuation-panel-3">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Axial load <span class="unit-label">N</span></label>
+          <input type="number" id="b-load" value="2000" min="10" max="200000" step="10" oninput="calcBallscrew()">
+        </div>
+        <div class="field">
+          <label>Lead <span class="unit-label">mm/rev</span></label>
+          <input type="number" id="b-lead" value="10" min="1" max="100" step="0.5" oninput="calcBallscrew()">
+        </div>
+        <div class="field">
+          <label>Required linear velocity <span class="unit-label">mm/s</span></label>
+          <input type="number" id="b-linvel" value="300" min="1" max="3000" step="1" oninput="calcBallscrew()">
+        </div>
+        <div class="field">
+          <label>Screw efficiency η</label>
+          <input type="number" id="b-eta" value="0.9" min="0.1" max="0.99" step="0.01" oninput="calcBallscrew()">
+          <p class="hint">Ball screw often 0.85–0.95 · sliding screw may be much lower</p>
+        </div>
+        <div class="field">
+          <label>Design factor</label>
+          <input type="number" id="b-sf" value="1.5" min="1" max="5" step="0.1" oninput="calcBallscrew()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Required rotational speed</div>
+          <div class="result-val" id="b-rpm">—</div>
+          <div class="result-unit">rpm</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Running torque</div>
+          <div class="result-val" id="b-torque">—</div>
+          <div class="result-unit">Nm · before acceleration/inertia</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Design torque</div>
+          <div class="result-val" id="b-tdesign">—</div>
+          <div class="result-unit">Nm · includes design factor</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Required power</div>
+          <div class="result-val" id="b-pow">—</div>
+          <div class="result-unit">W · based on axial force and linear speed</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Back-driving note</div>
+          <p class="result-note" id="b-back">—</p>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>critical speed and screw whip</li>
+            <li>buckling, bearing arrangement and unsupported length</li>
+            <li>nut life, lubrication and duty cycle</li>
+            <li>rotary inertia and acceleration torque</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="calc-footer">
+    <p>Actuation tools: pneumatic cylinder, electric actuator, hydraulic cylinder and ball screw.</p>
+    <a href="/#request">Turn this baseline into a selection brief →</a>
+  </div>
+</div>
+
+
+</div>
+
+<div class="tool-family" id="family-hydraulics" data-family="hydraulics">
+<div class="selector-wrap">
+  <div class="calc-tabs">
+    <button class="calc-tab active" onclick="switchFamilyTab('hydraulics', 0)">
+      <span class="tab-num">01</span>
+      <span class="tab-label">Pump<br>Sizing</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('hydraulics', 1)">
+      <span class="tab-num">02</span>
+      <span class="tab-label">Pressure<br>Drop</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('hydraulics', 2)">
+      <span class="tab-num">03</span>
+      <span class="tab-label">Valve<br>Kv / Cv</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('hydraulics', 3)">
+      <span class="tab-num">04</span>
+      <span class="tab-label">Accumulator<br>Sizing</span>
+    </button>
+  </div>
+
+  <div class="calc-body">
+
+    <!-- 01 PUMP SIZING -->
+    <div class="calc-panel active" id="hydraulics-panel-0">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Actuator bore diameter <span class="unit-label">mm</span></label>
+          <input type="number" id="pu-bore" value="100" min="10" max="500" step="1" oninput="calcPump()">
+        </div>
+        <div class="field">
+          <label>Rod velocity <span class="unit-label">mm/s</span></label>
+          <input type="number" id="pu-vel" value="100" min="1" max="2000" step="1" oninput="calcPump()">
+        </div>
+        <div class="field">
+          <label>Number of simultaneous actuators</label>
+          <input type="number" id="pu-qty" value="1" min="1" max="20" step="1" oninput="calcPump()">
+        </div>
+        <div class="field">
+          <label>System pressure <span class="unit-label">bar</span></label>
+          <input type="number" id="pu-press" value="200" min="10" max="700" step="5" oninput="calcPump()">
+        </div>
+        <div class="field">
+          <label>Overall system efficiency η</label>
+          <input type="number" id="pu-eta" value="0.85" min="0.3" max="0.99" step="0.01" oninput="calcPump()">
+          <p class="hint">Gear pump ~0.80–0.88 · Piston pump ~0.88–0.94</p>
+        </div>
+        <div class="field">
+          <label>Design factor</label>
+          <input type="number" id="pu-sf" value="1.25" min="1" max="3" step="0.05" oninput="calcPump()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Required flow rate</div>
+          <div class="result-val" id="pu-flow">—</div>
+          <div class="result-unit">l/min · cap-end, all actuators combined</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Design flow rate</div>
+          <div class="result-val" id="pu-flowdes">—</div>
+          <div class="result-unit">l/min · includes design factor</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Hydraulic power</div>
+          <div class="result-val" id="pu-pow">—</div>
+          <div class="result-unit">kW · pressure × flow</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Required shaft power</div>
+          <div class="result-val" id="pu-shaft">—</div>
+          <div class="result-unit">kW · adjusted for system efficiency</div>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>return line back-pressure and standby losses</li>
+            <li>heat rejection, fluid cooling requirements</li>
+            <li>reservoir sizing and fluid volume</li>
+            <li>pump displacement selection and speed range</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 PRESSURE DROP -->
+    <div class="calc-panel" id="hydraulics-panel-1">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Pipe / hose internal diameter <span class="unit-label">mm</span></label>
+          <input type="number" id="pd-dia" value="20" min="2" max="200" step="0.5" oninput="calcPDrop()">
+        </div>
+        <div class="field">
+          <label>Line length <span class="unit-label">m</span></label>
+          <input type="number" id="pd-len" value="5" min="0.1" max="100" step="0.1" oninput="calcPDrop()">
+        </div>
+        <div class="field">
+          <label>Flow rate <span class="unit-label">l/min</span></label>
+          <input type="number" id="pd-flow" value="40" min="0.1" max="2000" step="0.5" oninput="calcPDrop()">
+        </div>
+        <div class="field">
+          <label>Fluid type</label>
+          <select id="pd-fluid" oninput="calcPDrop()">
+            <option value="32">ISO VG 32 (mineral oil)</option>
+            <option value="46" selected>ISO VG 46 (mineral oil)</option>
+            <option value="68">ISO VG 68 (mineral oil)</option>
+            <option value="15">HF-E / water-glycol (~15 cSt)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Operating temperature <span class="unit-label">°C</span></label>
+          <input type="number" id="pd-temp" value="50" min="20" max="90" step="5" oninput="calcPDrop()">
+          <p class="hint">Viscosity is corrected for temperature (Walther equation)</p>
+        </div>
+        <div class="field">
+          <label>Equivalent fittings length factor <span class="unit-label">×L</span></label>
+          <input type="number" id="pd-kfactor" value="1.3" min="1" max="5" step="0.1" oninput="calcPDrop()">
+          <p class="hint">1.0 = straight pipe only · 1.3 typical with elbows and tees</p>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Flow velocity</div>
+          <div class="result-val" id="pd-vel">—</div>
+          <div class="result-unit">m/s · at operating conditions</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Reynolds number</div>
+          <div class="result-val" id="pd-re">—</div>
+          <div class="result-unit" id="pd-regime">—</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Pressure drop</div>
+          <div class="result-val" id="pd-dp">—</div>
+          <div class="result-unit">bar · Darcy-Weisbach, corrected viscosity</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Velocity check</div>
+          <span class="badge" id="pd-velcheck">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>individual fitting pressure losses (Kv method)</li>
+            <li>pipe roughness effects above ~Re 4000</li>
+            <li>fluid compressibility and aeration</li>
+            <li>filter, valve and manifold pressure drops</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 VALVE KV/CV -->
+    <div class="calc-panel" id="hydraulics-panel-2">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Calculation mode</label>
+          <select id="kv-mode" oninput="calcKv()">
+            <option value="kv_from_flow">Find Kv/Cv — known flow and ΔP</option>
+            <option value="flow_from_kv">Find flow — known Kv and ΔP</option>
+            <option value="dp_from_kv">Find ΔP — known Kv and flow</option>
+          </select>
+        </div>
+        <div class="field" id="kv-field-flow">
+          <label>Flow rate <span class="unit-label">l/min</span></label>
+          <input type="number" id="kv-flow" value="40" min="0.1" max="5000" step="0.5" oninput="calcKv()">
+        </div>
+        <div class="field" id="kv-field-kv">
+          <label>Valve Kv value <span class="unit-label">m³/h at 1 bar</span></label>
+          <input type="number" id="kv-kv" value="10" min="0.01" max="5000" step="0.1" oninput="calcKv()">
+        </div>
+        <div class="field" id="kv-field-dp">
+          <label>Pressure drop across valve <span class="unit-label">bar</span></label>
+          <input type="number" id="kv-dp" value="3" min="0.1" max="350" step="0.1" oninput="calcKv()">
+        </div>
+        <div class="field">
+          <label>Fluid density ρ <span class="unit-label">kg/m³</span></label>
+          <input type="number" id="kv-rho" value="870" min="700" max="1100" step="5" oninput="calcKv()">
+          <p class="hint">Mineral oil ~860–880 · Water 1000 · HF-E ~1060</p>
+        </div>
+        <div class="field">
+          <label>Upstream pressure p1 <span class="unit-label">bar</span></label>
+          <input type="number" id="kv-p1" value="200" min="1" max="700" step="5" oninput="calcKv()">
+          <p class="hint">Used for cavitation index only</p>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key" id="kv-res1-key">Kv required</div>
+          <div class="result-val" id="kv-res1">—</div>
+          <div class="result-unit" id="kv-res1-unit">m³/h at 1 bar ΔP</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key" id="kv-res2-key">Cv equivalent</div>
+          <div class="result-val" id="kv-res2">—</div>
+          <div class="result-unit" id="kv-res2-unit">US gpm at 1 psi ΔP · Cv = Kv × 1.156</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Cavitation index (σ)</div>
+          <div class="result-val" id="kv-cav">—</div>
+          <div class="result-unit" id="kv-cav-unit">—</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Cavitation risk</div>
+          <span class="badge" id="kv-cavcheck">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>gas / two-phase flow correction factors</li>
+            <li>choked flow and flashing conditions</li>
+            <li>valve authority and control stability</li>
+            <li>noise, erosion and seat velocity limits</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 ACCUMULATOR -->
+    <div class="calc-panel" id="hydraulics-panel-3">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Accumulator function</label>
+          <select id="ac-mode" oninput="calcAccum()">
+            <option value="energy">Energy storage / emergency</option>
+            <option value="pulsation">Pulsation damping</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Required usable volume <span class="unit-label">l</span></label>
+          <input type="number" id="ac-vuse" value="5" min="0.1" max="1000" step="0.1" oninput="calcAccum()">
+          <p class="hint">Volume to deliver between p1 and p2</p>
+        </div>
+        <div class="field">
+          <label>Minimum working pressure p1 <span class="unit-label">bar</span></label>
+          <input type="number" id="ac-p1" value="150" min="10" max="700" step="5" oninput="calcAccum()">
+        </div>
+        <div class="field">
+          <label>Maximum working pressure p2 <span class="unit-label">bar</span></label>
+          <input type="number" id="ac-p2" value="250" min="10" max="700" step="5" oninput="calcAccum()">
+        </div>
+        <div class="field">
+          <label>Process type</label>
+          <select id="ac-process" oninput="calcAccum()">
+            <option value="1.4">Adiabatic — fast discharge (n = 1.4)</option>
+            <option value="1.0" selected>Isothermal — slow discharge (n = 1.0)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Pre-charge safety margin</label>
+          <input type="number" id="ac-margin" value="0.9" min="0.5" max="0.98" step="0.01" oninput="calcAccum()">
+          <p class="hint">Pre-charge p0 = p1 × margin · typically 0.85–0.92</p>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Pre-charge pressure p0</div>
+          <div class="result-val" id="ac-p0">—</div>
+          <div class="result-unit">bar · nitrogen gas charge at ambient temperature</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Required total gas volume</div>
+          <div class="result-val" id="ac-vtot">—</div>
+          <div class="result-unit">l · at pre-charge state (bladder fully extended)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Recommended accumulator size</div>
+          <div class="result-val" id="ac-rec" style="font-size:clamp(1.6rem,3vw,2.6rem)">—</div>
+          <div class="result-unit">l nominal · nearest standard size above calculated volume</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Pressure ratio check (p2/p0)</div>
+          <span class="badge" id="ac-check">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>temperature correction on gas pre-charge</li>
+            <li>bladder / piston fatigue life and cycle rating</li>
+            <li>manifold, safety block and dump valve sizing</li>
+            <li>pressure vessel certification and safety factors</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /calc-body -->
+
+  <div class="calc-footer">
+    <p>Hydraulics tools: pump sizing, pressure drop, valve Kv/Cv and accumulator sizing.</p>
+    <a href="/#request">Turn this baseline into a selection brief →</a>
+  </div>
+</div>
+
+
+</div>
+<div class="tool-family" id="family-controls" data-family="controls">
+<div class="selector-wrap">
+  <div class="calc-tabs">
+    <button class="calc-tab active" onclick="switchFamilyTab('controls', 0)">
+      <span class="tab-num">01</span>
+      <span class="tab-label">PLC I/O<br>Sizing</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('controls', 1)">
+      <span class="tab-num">02</span>
+      <span class="tab-label">Servo Axis<br>Power</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('controls', 2)">
+      <span class="tab-num">03</span>
+      <span class="tab-label">Fieldbus<br>Cycle Time</span>
+    </button>
+    <button class="calc-tab" onclick="switchFamilyTab('controls', 3)">
+      <span class="tab-num">04</span>
+      <span class="tab-label">Safety<br>SIL / PFD</span>
+    </button>
+  </div>
+
+  <div class="calc-body">
+
+    <!-- 01 PLC I/O SIZING -->
+    <div class="calc-panel active" id="controls-panel-0">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Servo / stepper axes <span class="unit-label">count</span></label>
+          <input type="number" id="io-axes" value="4" min="0" max="128" step="1" oninput="calcIO()">
+          <p class="hint">Each axis: 2 DI (enable/fault) + 2 DO (enable/reset) + 1 AI (current feedback)</p>
+        </div>
+        <div class="field">
+          <label>Discrete sensors (prox, photo, limit) <span class="unit-label">count</span></label>
+          <input type="number" id="io-sensors" value="16" min="0" max="512" step="1" oninput="calcIO()">
+        </div>
+        <div class="field">
+          <label>Solenoid valves / discrete outputs <span class="unit-label">count</span></label>
+          <input type="number" id="io-valves" value="8" min="0" max="512" step="1" oninput="calcIO()">
+        </div>
+        <div class="field">
+          <label>Analog sensors (pressure, temp, pos) <span class="unit-label">count</span></label>
+          <input type="number" id="io-anin" value="4" min="0" max="128" step="1" oninput="calcIO()">
+        </div>
+        <div class="field">
+          <label>Analog outputs (proportional valves, VFDs) <span class="unit-label">count</span></label>
+          <input type="number" id="io-anout" value="2" min="0" max="128" step="1" oninput="calcIO()">
+        </div>
+        <div class="field">
+          <label>Safety I/O — E-stops, guards, door locks <span class="unit-label">count</span></label>
+          <input type="number" id="io-safety" value="4" min="0" max="128" step="1" oninput="calcIO()">
+          <p class="hint">Safety DI counted as dual-channel pairs</p>
+        </div>
+        <div class="field">
+          <label>I/O spare margin <span class="unit-label">%</span></label>
+          <input type="number" id="io-spare" value="20" min="0" max="50" step="5" oninput="calcIO()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-grid">
+          <div class="result-grid-cell">
+            <div class="result-key">Digital inputs (DI)</div>
+            <div class="result-val" id="io-di">—</div>
+            <div class="result-unit">channels incl. spare</div>
+          </div>
+          <div class="result-grid-cell">
+            <div class="result-key">Digital outputs (DO)</div>
+            <div class="result-val" id="io-do">—</div>
+            <div class="result-unit">channels incl. spare</div>
+          </div>
+          <div class="result-grid-cell">
+            <div class="result-key">Analog inputs (AI)</div>
+            <div class="result-val" id="io-ai">—</div>
+            <div class="result-unit">channels incl. spare</div>
+          </div>
+          <div class="result-grid-cell">
+            <div class="result-key">Analog outputs (AO)</div>
+            <div class="result-val" id="io-ao">—</div>
+            <div class="result-unit">channels incl. spare</div>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Safety I/O channels</div>
+          <div class="result-val" id="io-safeout">—</div>
+          <div class="result-unit">dual-channel DI pairs · dedicated safety module required</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Estimated I/O modules</div>
+          <div class="result-val" id="io-mods">—</div>
+          <div class="result-unit">16-ch DI/DO + 8-ch AI/AO baseline — verify with rack layout</div>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>HMI, SCADA and historian connections</li>
+            <li>fieldbus node addressing and topology</li>
+            <li>power supply sizing and cabinet layout</li>
+            <li>PLC CPU scan time and memory requirements</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 SERVO AXIS POWER -->
+    <div class="calc-panel" id="controls-panel-1">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Load inertia J<sub style="font-size:.6em">load</sub> <span class="unit-label">kg·m²</span></label>
+          <input type="number" id="sv-jload" value="0.005" min="0.0001" max="100" step="0.0001" oninput="calcServo()">
+        </div>
+        <div class="field">
+          <label>Motor rotor inertia J<sub style="font-size:.6em">motor</sub> <span class="unit-label">kg·m²</span></label>
+          <input type="number" id="sv-jmotor" value="0.0008" min="0.00001" max="10" step="0.00001" oninput="calcServo()">
+          <p class="hint">From motor datasheet · inertia ratio J<sub style="font-size:.6em">load</sub>/J<sub style="font-size:.6em">motor</sub> check</p>
+        </div>
+        <div class="field">
+          <label>Peak angular acceleration <span class="unit-label">rad/s²</span></label>
+          <input type="number" id="sv-acc" value="100" min="1" max="10000" step="1" oninput="calcServo()">
+        </div>
+        <div class="field">
+          <label>Continuous load torque T<sub style="font-size:.6em">load</sub> <span class="unit-label">Nm</span></label>
+          <input type="number" id="sv-tload" value="2" min="0" max="10000" step="0.1" oninput="calcServo()">
+        </div>
+        <div class="field">
+          <label>Maximum speed <span class="unit-label">rpm</span></label>
+          <input type="number" id="sv-speed" value="3000" min="1" max="10000" step="10" oninput="calcServo()">
+        </div>
+        <div class="field">
+          <label>Drive / transmission efficiency η</label>
+          <input type="number" id="sv-eta" value="0.9" min="0.3" max="1" step="0.01" oninput="calcServo()">
+        </div>
+        <div class="field">
+          <label>Design factor</label>
+          <input type="number" id="sv-sf" value="1.5" min="1" max="4" step="0.1" oninput="calcServo()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Peak acceleration torque</div>
+          <div class="result-val" id="sv-tacc">—</div>
+          <div class="result-unit">Nm · (J<sub style="font-size:.7em">load</sub> + J<sub style="font-size:.7em">motor</sub>) × α</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Peak motor torque required</div>
+          <div class="result-val" id="sv-tpeak">—</div>
+          <div class="result-unit">Nm · includes load torque, acceleration and design factor</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Continuous motor power</div>
+          <div class="result-val" id="sv-pow">—</div>
+          <div class="result-unit">W · at maximum speed, adjusted for efficiency</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Inertia ratio J<sub style="font-size:.7em">load</sub> / J<sub style="font-size:.7em">motor</sub></div>
+          <div class="result-val" id="sv-ratio" style="font-size:clamp(2rem,3.5vw,3rem)">—</div>
+          <div class="result-unit">— </div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Inertia matching check</div>
+          <span class="badge" id="sv-check">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>motion profile shape — trapezoidal vs S-curve</li>
+            <li>RMS torque over full duty cycle</li>
+            <li>gearbox ratio optimisation</li>
+            <li>drive DC bus sizing and regeneration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 FIELDBUS CYCLE TIME -->
+    <div class="calc-panel" id="controls-panel-2">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Fieldbus protocol</label>
+          <select id="fb-proto" oninput="calcFieldbus()">
+            <option value="ethercat">EtherCAT</option>
+            <option value="profinet_rt">PROFINET RT</option>
+            <option value="profinet_irt">PROFINET IRT</option>
+            <option value="ethernetip">EtherNet/IP</option>
+            <option value="powerlink">POWERLINK</option>
+            <option value="canopen">CANopen (1 Mbit)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Number of nodes / slaves <span class="unit-label">count</span></label>
+          <input type="number" id="fb-nodes" value="8" min="1" max="512" step="1" oninput="calcFieldbus()">
+        </div>
+        <div class="field">
+          <label>Process data per node <span class="unit-label">bytes</span></label>
+          <input type="number" id="fb-bytes" value="8" min="1" max="256" step="1" oninput="calcFieldbus()">
+          <p class="hint">Typical drive PDO: 4–8 bytes · I/O node: 2–4 bytes</p>
+        </div>
+        <div class="field">
+          <label>Target application cycle time <span class="unit-label">µs</span></label>
+          <input type="number" id="fb-target" value="1000" min="62" max="50000" step="62" oninput="calcFieldbus()">
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">Estimated minimum cycle time</div>
+          <div class="result-val" id="fb-cycle">—</div>
+          <div class="result-unit" id="fb-cycle-unit">µs · based on frame overhead + propagation</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Total bus utilisation</div>
+          <div class="result-val" id="fb-util">—</div>
+          <div class="result-unit">% of available bandwidth at target cycle</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Maximum nodes at target cycle</div>
+          <div class="result-val" id="fb-maxnodes">—</div>
+          <div class="result-unit">nodes before cycle time is exceeded</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Cycle time feasibility</div>
+          <span class="badge" id="fb-check">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>switch latency and topology delays (star vs line)</li>
+            <li>jitter, synchronisation accuracy and drift</li>
+            <li>cable propagation delay beyond 100m segments</li>
+            <li>master CPU processing time and stack overhead</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 SAFETY SIL / PFD -->
+    <div class="calc-panel" id="controls-panel-3">
+      <div class="inputs-col">
+        <p class="col-heading">Input parameters</p>
+        <div class="field">
+          <label>Safety function architecture</label>
+          <select id="sil-arch" oninput="calcSIL()">
+            <option value="1oo1">1oo1 — single channel</option>
+            <option value="1oo2" selected>1oo2 — dual channel (voting 1-out-of-2)</option>
+            <option value="2oo2">2oo2 — dual channel (voting 2-out-of-2)</option>
+            <option value="2oo3">2oo3 — triple channel (voting 2-out-of-3)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Component failure rate λ<sub style="font-size:.6em">D</sub> <span class="unit-label">failures/h</span></label>
+          <input type="number" id="sil-lambda" value="0.000001" min="0.0000001" max="0.01" step="0.0000001" oninput="calcSIL()">
+          <p class="hint">Typical SIL-rated relay: 1×10⁻⁷ · PLC I/O: 1×10⁻⁶ · Standard sensor: 1×10⁻⁵</p>
+        </div>
+        <div class="field">
+          <label>Diagnostic coverage (DC) <span class="unit-label">%</span></label>
+          <input type="number" id="sil-dc" value="90" min="0" max="99" step="1" oninput="calcSIL()">
+          <p class="hint">No DC: 0% · Low: 60% · Medium: 90% · High: 99%</p>
+        </div>
+        <div class="field">
+          <label>Proof test interval T<sub style="font-size:.6em">1</sub> <span class="unit-label">years</span></label>
+          <input type="number" id="sil-proof" value="1" min="0.083" max="25" step="0.083" oninput="calcSIL()">
+        </div>
+        <div class="field">
+          <label>Common cause failure β <span class="unit-label">%</span></label>
+          <input type="number" id="sil-beta" value="2" min="0.5" max="20" step="0.5" oninput="calcSIL()">
+          <p class="hint">IEC 62061 Table D.5: typically 1–5% for well-separated channels</p>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="results-col">
+        <p class="col-heading">Results</p>
+        <div class="result-item">
+          <div class="result-key">PFD<sub style="font-size:.7em">avg</sub> — probability of failure on demand</div>
+          <div class="result-val" id="sil-pfd" style="font-size:clamp(1.6rem,3vw,2.8rem)">—</div>
+          <div class="result-unit">average over proof test interval</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Achieved SIL level</div>
+          <div class="result-val" id="sil-level">—</div>
+          <div class="result-unit">per IEC 62061 / IEC 61508 PFD bands</div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">Risk reduction factor (RRF)</div>
+          <div class="result-val" id="sil-rrf" style="font-size:clamp(1.6rem,3vw,2.8rem)">—</div>
+          <div class="result-unit">RRF = 1 / PFD<sub style="font-size:.7em">avg</sub></div>
+        </div>
+        <div class="result-item">
+          <div class="result-key">SIL claim check</div>
+          <span class="badge" id="sil-check">—</span>
+        </div>
+        <div class="assumptions">
+          <h3>Not included</h3>
+          <ul>
+            <li>hardware fault tolerance (HFT) verification</li>
+            <li>safe failure fraction (SFF) calculation</li>
+            <li>systematic capability and software SIL</li>
+            <li>full IEC 61508 / ISO 13849 functional safety assessment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /calc-body -->
+
+  <div class="calc-footer">
+    <p>Controls tools: PLC I/O sizing, servo axis power, fieldbus cycle time and safety SIL/PFD.</p>
+    <a href="/#request">Turn this baseline into a selection brief →</a>
+  </div>
+</div>
+
+</div>
+
+
+<section class="info-section">
+  <div class="info-grid">
+    <div class="info-block">
+      <h2>What these tools establish</h2>
+      <p>Use them to define the first engineering baseline: force, torque, flow, pressure drop, valve sizing, I/O count, network timing and power class behind the application.</p>
+      <ul>
+        <li>technical starting point</li>
+        <li>application scale and feasibility</li>
+        <li>hydraulic and controls system envelope</li>
+        <li>architecture comparison</li>
+        <li>supplier conversation preparation</li>
+      </ul>
+    </div>
+    <div class="info-block">
+      <h2>What context adds</h2>
+      <p>The next layer is not just another number. It is the operating context that turns a calculation into a selection decision.</p>
+      <ul>
+        <li>duty cycle and motion profile</li>
+        <li>mounting, environment and safety factor</li>
+        <li>control architecture, network timing and integration risk</li>
+        <li>supplier limits, availability and trade-offs</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Turn the baseline into a selection decision.</h2>
+  <p>MotionSelect helps translate these baselines into sizing logic, supplier options, integration risks and the questions to ask before committing.</p>
+  <a href="/#request" class="cta-btn">Build a selection brief →</a>
+</section>
+
+<footer>
+  <span>© MotionSelect · All enquiries treated as confidential</span>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="/">Home</a>
+    <a href="/privacy.html">Privacy policy</a>
+  </div>
+</footer>
+
+<script>
+function value(id, fallback){
+  const v = parseFloat(document.getElementById(id).value);
+  return Number.isFinite(v) ? v : fallback;
+}
+
+function formatNumber(n, decimals = 0){
+  return Number(n).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function switchToolFamily(family){
+  document.querySelectorAll('.tool-family').forEach(el => el.classList.toggle('active', el.dataset.family === family));
+  document.querySelectorAll('[data-family-card]').forEach(card => card.classList.toggle('is-active', card.dataset.familyCard === family));
+}
+
+function switchFamilyTab(family, idx){
+  const wrap = document.querySelector('.tool-family[data-family="' + family + '"]');
+  if(!wrap) return;
+  wrap.querySelectorAll('.calc-tab').forEach((t,i) => t.classList.toggle('active', i === idx));
+  wrap.querySelectorAll('.calc-panel').forEach((p,i) => p.classList.toggle('active', i === idx));
+}
+
+function calcPneum(){
+  const bore = value('p-bore', 80);
+  const rod = Math.min(value('p-rod', 25), bore * 0.98);
+  const pressGaugeBar = value('p-press', 6);
+  const stroke = value('p-stroke', 200);
+  const cycles = value('p-cycles', 10);
+  const isDouble = document.getElementById('p-type').value === 'double';
+  const eff = 0.85;
+
+  const boreAreaMm2 = Math.PI * Math.pow(bore / 2, 2);
+  const rodAreaMm2 = Math.PI * Math.pow(rod / 2, 2);
+  const annularAreaMm2 = Math.max(boreAreaMm2 - rodAreaMm2, 0);
+  const pressurePa = pressGaugeBar * 1e5;
+
+  const extForceN = boreAreaMm2 * 1e-6 * pressurePa * eff;
+  const retForceN = annularAreaMm2 * 1e-6 * pressurePa * eff;
+
+  const extVolumeL = boreAreaMm2 * stroke / 1e6;
+  const retVolumeL = annularAreaMm2 * stroke / 1e6;
+  const absolutePressureRatio = (pressGaugeBar + 1.013) / 1.013;
+  const airPerCycleNl = (extVolumeL + (isDouble ? retVolumeL : 0)) * absolutePressureRatio;
+  const airFlowNlMin = airPerCycleNl * cycles;
+
+  document.getElementById('p-force-ext').textContent = formatNumber(extForceN, 0);
+  document.getElementById('p-force-ret').textContent = isDouble ? formatNumber(retForceN, 0) : 'N/A';
+  document.getElementById('p-air').textContent = formatNumber(airFlowNlMin, 1);
+
+  const ratio = rod / bore;
+  const chk = document.getElementById('p-check');
+  if(ratio < 0.2){ chk.textContent = 'Check rod size'; chk.className = 'badge badge-warn'; }
+  else if(ratio > 0.7){ chk.textContent = 'Large rod ratio'; chk.className = 'badge badge-warn'; }
+  else { chk.textContent = 'Ratio within typical range'; chk.className = 'badge badge-ok'; }
+}
+
+function calcElectr(){
+  const m = value('e-mass', 50);
+  const mu = value('e-mu', 0.15);
+  const v = value('e-vel', 500) / 1000;
+  const a = value('e-acc', 5);
+  const angle = parseInt(document.getElementById('e-orient').value, 10) || 0;
+  const eta = Math.max(value('e-eta', 0.85), 0.01);
+  const sf = value('e-sf', 1.5);
+  const g = 9.81;
+  const theta = angle * Math.PI / 180;
+
+  const fAcc = m * a;
+  const fFriction = m * g * mu * Math.cos(theta);
+  const fGravity = m * g * Math.sin(theta);
+  const fPeak = fAcc + fFriction + fGravity;
+  const fDesign = fPeak * sf;
+  const pDesign = (fDesign * v) / eta;
+
+  document.getElementById('e-facc').textContent = formatNumber(fAcc, 0);
+  document.getElementById('e-ftot').textContent = formatNumber(fPeak, 0);
+  document.getElementById('e-fdesign').textContent = formatNumber(fDesign, 0);
+  document.getElementById('e-pow').textContent = formatNumber(pDesign, 0);
+}
+
+function calcHydro(){
+  const bore = value('h-bore', 100);
+  const rod = Math.min(value('h-rod', 50), bore * 0.98);
+  const press = value('h-press', 200);
+  const vel = value('h-vel', 100) / 1000;
+  const eta = Math.max(value('h-eta', 0.9), 0.01);
+
+  const capAreaM2 = Math.PI * Math.pow(bore / 2, 2) / 1e6;
+  const rodAreaM2 = Math.PI * Math.pow(rod / 2, 2) / 1e6;
+  const annularAreaM2 = Math.max(capAreaM2 - rodAreaM2, 0);
+  const pressurePa = press * 1e5;
+
+  const pushForceKN = capAreaM2 * pressurePa * eta / 1000;
+  const pullForceKN = annularAreaM2 * pressurePa * eta / 1000;
+  const flowLMin = capAreaM2 * vel * 60000;
+  const powerKW = (pressurePa * capAreaM2 * vel) / (1000 * eta);
+
+  document.getElementById('h-fpush').textContent = formatNumber(pushForceKN, 1);
+  document.getElementById('h-fpull').textContent = formatNumber(pullForceKN, 1);
+  document.getElementById('h-flow').textContent = formatNumber(flowLMin, 1);
+  document.getElementById('h-pow').textContent = formatNumber(powerKW, 2);
+}
+
+function calcBallscrew(){
+  const F = value('b-load', 2000);
+  const leadMm = value('b-lead', 10);
+  const linVelMmS = value('b-linvel', 300);
+  const eta = Math.max(value('b-eta', 0.9), 0.01);
+  const sf = value('b-sf', 1.5);
+
+  const rpm = (linVelMmS / leadMm) * 60;
+  const leadM = leadMm / 1000;
+  const torqueNm = (F * leadM) / (2 * Math.PI * eta);
+  const designTorqueNm = torqueNm * sf;
+  const powerW = (F * (linVelMmS / 1000)) / eta;
+
+  document.getElementById('b-rpm').textContent = formatNumber(rpm, 0);
+  document.getElementById('b-torque').textContent = formatNumber(torqueNm, 3);
+  document.getElementById('b-tdesign').textContent = formatNumber(designTorqueNm, 3);
+  document.getElementById('b-pow').textContent = formatNumber(powerW, 1);
+
+  document.getElementById('b-back').textContent = 'Back-driving is an application-context check. Review lead angle, friction, load direction, brake strategy, screw type and vertical-axis risk.';
+}
+
+
+/* ── 01 PUMP SIZING ──────────────────────────────────────── */
+function calcPump(){
+  const bore   = value('pu-bore', 100);
+  const vel    = value('pu-vel', 100);
+  const qty    = Math.max(1, Math.round(value('pu-qty', 1)));
+  const press  = value('pu-press', 200);
+  const eta    = Math.max(value('pu-eta', 0.85), 0.01);
+  const sf     = value('pu-sf', 1.25);
+
+  const areaM2   = Math.PI * Math.pow(bore / 2, 2) / 1e6;
+  const flowM3s  = areaM2 * (vel / 1000) * qty;
+  const flowLmin = flowM3s * 60000;
+  const flowDes  = flowLmin * sf;
+  const pressurePa = press * 1e5;
+  const powHydKW = (pressurePa * flowM3s) / 1000;
+  const powShaftKW = powHydKW / eta;
+
+  document.getElementById('pu-flow').textContent    = formatNumber(flowLmin, 1);
+  document.getElementById('pu-flowdes').textContent = formatNumber(flowDes, 1);
+  document.getElementById('pu-pow').textContent     = formatNumber(powHydKW, 2);
+  document.getElementById('pu-shaft').textContent   = formatNumber(powShaftKW, 2);
+}
+
+/* ── 02 PRESSURE DROP ────────────────────────────────────── */
+function walther(cSt40, tempC){
+  // Walther viscosity-temperature: log log (ν+0.8) = A - B·log(T_K)
+  // B is a fixed oil property determined from two reference points (40°C and 100°C).
+  // cSt100 lookup per ISO VG grade (mineral oil, VI ~95-100):
+  //   VG32→5.4  VG46→6.8  VG68→9.0  HF-E(15cSt@40)→2.5
+  const cSt100map = { 15: 2.5, 32: 5.4, 46: 6.8, 68: 9.0 };
+  const cSt100 = cSt100map[cSt40] || (cSt40 * 0.148); // fallback: VI~95 approximation
+  const T1 = 40  + 273.15; // reference temp 1 — 40°C in Kelvin
+  const T2 = 100 + 273.15; // reference temp 2 — 100°C in Kelvin
+  const Tt = tempC + 273.15; // target temperature in Kelvin
+  const W1 = Math.log10(Math.log10(cSt40  + 0.8));
+  const W2 = Math.log10(Math.log10(cSt100 + 0.8));
+  // B derived from the two fixed reference points — independent of target temp
+  const B  = (W1 - W2) / (Math.log10(T2) - Math.log10(T1));
+  const A  = W1 + B * Math.log10(T1);
+  // Evaluate at target temperature
+  const WW = A - B * Math.log10(Tt);
+  return Math.max(Math.pow(10, Math.pow(10, WW)) - 0.8, 0.1); // clamp to avoid negative
+}
+
+function calcPDrop(){
+  const dia    = value('pd-dia', 20) / 1000;
+  const len    = value('pd-len', 5);
+  const flow   = value('pd-flow', 40);
+  const cSt40  = parseFloat(document.getElementById('pd-fluid').value) || 46;
+  const temp   = value('pd-temp', 50);
+  const kf     = value('pd-kfactor', 1.3);
+
+  // Density varies with fluid type — ISO 4413 / supplier data
+  const rhoMap = { 15: 1055, 32: 870, 46: 870, 68: 875 };
+  const rho = rhoMap[cSt40] || 870; // kg/m³
+  const nu       = walther(cSt40, temp) * 1e-6;  // m²/s
+  const area     = Math.PI * Math.pow(dia / 2, 2);
+  const flowM3s  = flow / 60000;
+  const v        = flowM3s / area;
+  const Re       = (v * dia) / nu;
+  const Leff     = len * kf;
+
+  let f;
+  if(Re < 2300){
+    f = 64 / Re;
+  } else if(Re < 4000){
+    f = 64 / 2300; // transitional — conservative
+  } else {
+    // Swamee-Jain (smooth pipe)
+    f = 0.25 / Math.pow(Math.log10(5.74 / Math.pow(Re, 0.9)), 2);
+  }
+
+  const dpPa  = f * (Leff / dia) * 0.5 * rho * v * v;
+  const dpBar = dpPa / 1e5;
+
+  document.getElementById('pd-vel').textContent  = formatNumber(v, 2);
+  document.getElementById('pd-re').textContent   = formatNumber(Math.round(Re), 0);
+  document.getElementById('pd-dp').textContent   = formatNumber(dpBar, 3);
+
+  const regime = document.getElementById('pd-regime');
+  if(Re < 2300){ regime.textContent = 'Laminar flow — Re < 2300'; }
+  else if(Re < 4000){ regime.textContent = 'Transitional flow — Re 2300–4000'; }
+  else { regime.textContent = 'Turbulent flow — Re > 4000'; }
+
+  // Velocity check — ISO 4413 guidelines
+  const chk = document.getElementById('pd-velcheck');
+  if(v < 2){ chk.textContent = 'Return / drain line velocity OK'; chk.className = 'badge badge-ok'; }
+  else if(v <= 4){ chk.textContent = 'Pressure line velocity OK'; chk.className = 'badge badge-ok'; }
+  else if(v <= 6){ chk.textContent = 'High velocity — check erosion risk'; chk.className = 'badge badge-warn'; }
+  else { chk.textContent = 'Velocity excessive — resize line'; chk.className = 'badge badge-err'; }
+}
+
+/* ── 03 VALVE KV / CV ────────────────────────────────────── */
+function calcKv(){
+  const mode   = document.getElementById('kv-mode').value;
+  const flowIn = value('kv-flow', 40);
+  const kvIn   = value('kv-kv', 10);
+  const dpIn   = value('kv-dp', 3);
+  const rho    = value('kv-rho', 870);
+
+  // Toggle visible fields
+  document.getElementById('kv-field-flow').style.display = (mode === 'flow_from_kv') ? 'none' : 'block';
+  document.getElementById('kv-field-kv').style.display   = (mode === 'kv_from_flow')  ? 'none' : 'block';
+  document.getElementById('kv-field-dp').style.display   = (mode === 'dp_from_kv')    ? 'none' : 'block';
+
+  // Kv formula (ISO 4422): Kv = Q[m³/h] / sqrt(ΔP[bar] / (ρ/1000))
+  // where ρ reference = 1000 kg/m³ → correction factor sqrt(ρ/1000)
+  const rhoCorr = Math.sqrt(rho / 1000);
+  const flowM3h = flowIn / 16.667;  // l/min → m³/h
+
+  let kvResult, flowResult, dpResult;
+  let r1val, r1key, r1unit, r2val, r2key, r2unit;
+
+  if(mode === 'kv_from_flow'){
+    kvResult  = (flowM3h * rhoCorr) / Math.sqrt(Math.max(dpIn, 0.001));
+    r1key  = 'Kv required'; r1val = formatNumber(kvResult, 2); r1unit = 'm³/h at 1 bar ΔP';
+    r2key  = 'Cv equivalent'; r2val = formatNumber(kvResult * 1.156, 2); r2unit = 'US gpm at 1 psi ΔP';
+  } else if(mode === 'flow_from_kv'){
+    flowResult = (kvIn / rhoCorr) * Math.sqrt(Math.max(dpIn, 0.001)) * 16.667;
+    r1key  = 'Flow rate'; r1val = formatNumber(flowResult, 1); r1unit = 'l/min at given ΔP';
+    r2key  = 'Flow rate'; r2val = formatNumber(flowResult / 3.785, 1); r2unit = 'US gpm';
+  } else {
+    dpResult = Math.pow((flowM3h * rhoCorr) / Math.max(kvIn, 0.001), 2);
+    r1key  = 'Pressure drop'; r1val = formatNumber(dpResult, 3); r1unit = 'bar across valve';
+    r2key  = 'Pressure drop'; r2val = formatNumber(dpResult * 14.504, 2); r2unit = 'psi';
+  }
+
+  document.getElementById('kv-res1-key').textContent  = r1key;
+  document.getElementById('kv-res1').textContent      = r1val;
+  document.getElementById('kv-res1-unit').textContent = r1unit;
+  document.getElementById('kv-res2-key').textContent  = r2key;
+  document.getElementById('kv-res2').textContent      = r2val;
+  document.getElementById('kv-res2-unit').textContent = r2unit;
+
+  // Simplified cavitation index σ = p2 / (p1 - pv)
+  const p1bar = value('kv-p1', 200); // actual upstream pressure from input
+  const p2bar = Math.max(p1bar - dpIn, 0.1);
+  const pv    = 0.003; // vapour pressure mineral oil ~0.003 bar
+  const sigma = p2bar / (p1bar - pv);
+  document.getElementById('kv-cav').textContent      = formatNumber(sigma, 3);
+  document.getElementById('kv-cav-unit').textContent = 'p2 / (p1 − pv) · higher = lower cavitation risk';
+
+  const cavChk = document.getElementById('kv-cavcheck');
+  if(sigma > 0.5){ cavChk.textContent = 'Low cavitation risk'; cavChk.className = 'badge badge-ok'; }
+  else if(sigma > 0.25){ cavChk.textContent = 'Moderate risk — verify with supplier'; cavChk.className = 'badge badge-warn'; }
+  else { cavChk.textContent = 'High cavitation risk — review ΔP'; cavChk.className = 'badge badge-err'; }
+}
+
+/* ── 04 ACCUMULATOR SIZING ───────────────────────────────── */
+function calcAccum(){
+  const vUse   = value('ac-vuse', 5);
+  const p1     = value('ac-p1', 150);
+  const p2     = value('ac-p2', 250);
+  const n      = parseFloat(document.getElementById('ac-process').value) || 1.0;
+  const margin = value('ac-margin', 0.9);
+
+  const p0 = p1 * margin;  // pre-charge
+
+  // Validate pressure hierarchy
+  if(p2 <= p1){
+    document.getElementById('ac-p0').textContent  = '—';
+    document.getElementById('ac-vtot').textContent = 'p2 must be > p1';
+    document.getElementById('ac-rec').textContent  = '—';
+    const chk = document.getElementById('ac-check');
+    chk.textContent = 'Invalid: p2 ≤ p1'; chk.className = 'badge badge-err';
+    return;
+  }
+  if(p0 >= p1){
+    document.getElementById('ac-p0').textContent  = formatNumber(p0, 1);
+    document.getElementById('ac-vtot').textContent = 'Margin too high — p0 ≥ p1';
+    document.getElementById('ac-rec').textContent  = '—';
+    const chk = document.getElementById('ac-check');
+    chk.textContent = 'Invalid: p0 ≥ p1'; chk.className = 'badge badge-err';
+    return;
+  }
+  // V0 = total gas volume at pre-charge
+  // V_usable = V1 - V2
+  // V1 = V0 · (p0/p1)^(1/n)
+  // V2 = V0 · (p0/p2)^(1/n)
+  // vUse = V1 - V2 = V0 · [(p0/p1)^(1/n) - (p0/p2)^(1/n)]
+  const ratio = Math.pow(p0 / p1, 1 / n) - Math.pow(p0 / p2, 1 / n);
+  const v0 = ratio > 0 ? vUse / ratio : null;
+
+  // Nearest standard size
+  const std = [0.5, 1, 1.5, 2, 2.5, 4, 6, 10, 16, 20, 32, 40, 50, 63, 80, 100, 160, 200];
+  const recSize = v0 ? (std.find(s => s >= v0 * 1.1) || '>200') : '—';
+
+  // Pressure ratio check (p2/p0 should be ≤ 4:1 for bladder, ≤ 8:1 for piston)
+  const pressRatio = p2 / p0;
+
+  document.getElementById('ac-p0').textContent  = formatNumber(p0, 1);
+  document.getElementById('ac-vtot').textContent = v0 ? formatNumber(v0, 2) : 'Check p1/p2';
+  document.getElementById('ac-rec').textContent  = v0 ? recSize + ' l' : '—';
+
+  const chk = document.getElementById('ac-check');
+  chk.textContent = 'p2/p0 = ' + formatNumber(pressRatio, 2);
+  if(pressRatio <= 4){ chk.className = 'badge badge-ok'; }
+  else if(pressRatio <= 8){ chk.className = 'badge badge-warn'; }
+  else { chk.className = 'badge badge-err'; }
+}
+
+/* ── 01 PLC I/O SIZING ───────────────────────────────────── */
+function calcIO(){
+  const axes   = Math.round(value('io-axes', 4));
+  const sens   = Math.round(value('io-sensors', 16));
+  const valves = Math.round(value('io-valves', 8));
+  const anin   = Math.round(value('io-anin', 4));
+  const anout  = Math.round(value('io-anout', 2));
+  const safety = Math.round(value('io-safety', 4));
+  const spare  = value('io-spare', 20) / 100;
+
+  const rawDI = axes * 2 + sens;
+  const rawDO = axes * 2 + valves;
+  const rawAI = axes * 1 + anin;
+  const rawAO = anout;
+
+  const di = Math.ceil(rawDI * (1 + spare));
+  const doVal = Math.ceil(rawDO * (1 + spare));
+  const ai = Math.ceil(rawAI * (1 + spare));
+  const ao = Math.ceil(rawAO * (1 + spare));
+  const safeOut = safety * 2; // dual channel
+
+  // Module estimate: 16-ch DI/DO modules, 8-ch AI/AO modules
+  const mods = Math.ceil(di / 16) + Math.ceil(doVal / 16) + Math.ceil(ai / 8) + Math.ceil(ao / 8) + (safety > 0 ? 1 : 0);
+
+  document.getElementById('io-di').textContent      = di;
+  document.getElementById('io-do').textContent      = doVal;
+  document.getElementById('io-ai').textContent      = ai;
+  document.getElementById('io-ao').textContent      = ao;
+  document.getElementById('io-safeout').textContent = safeOut;
+  document.getElementById('io-mods').textContent    = mods;
+}
+
+/* ── 02 SERVO AXIS POWER ─────────────────────────────────── */
+function calcServo(){
+  const jLoad  = value('sv-jload', 0.005);
+  const jMot   = value('sv-jmotor', 0.0008);
+  const alpha  = value('sv-acc', 100);
+  const tLoad  = value('sv-tload', 2);
+  const rpm    = value('sv-speed', 3000);
+  const eta    = Math.max(value('sv-eta', 0.9), 0.01);
+  const sf     = value('sv-sf', 1.5);
+
+  const omega  = rpm * Math.PI / 30;
+  const tAcc   = (jLoad + jMot) * alpha;
+  const tPeak  = (tAcc + tLoad) * sf;
+  const pow    = (tLoad * omega) / eta;
+  const ratio  = jLoad / Math.max(jMot, 1e-12);
+
+  document.getElementById('sv-tacc').textContent  = formatNumber(tAcc, 2);
+  document.getElementById('sv-tpeak').textContent = formatNumber(tPeak, 2);
+  document.getElementById('sv-pow').textContent   = formatNumber(pow, 0);
+  document.getElementById('sv-ratio').textContent = formatNumber(ratio, 1);
+
+  const chk = document.getElementById('sv-check');
+  if(ratio <= 5){
+    chk.textContent = 'Excellent matching — ratio ≤ 5:1'; chk.className = 'badge badge-ok';
+  } else if(ratio <= 10){
+    chk.textContent = 'Acceptable — ratio 5–10:1, verify stability'; chk.className = 'badge badge-warn';
+  } else {
+    chk.textContent = 'Poor matching — ratio > 10:1, consider gearbox'; chk.className = 'badge badge-err';
+  }
+}
+
+/* ── 03 FIELDBUS CYCLE TIME ──────────────────────────────── */
+function calcFieldbus(){
+  const proto  = document.getElementById('fb-proto').value;
+  const nodes  = Math.max(1, Math.round(value('fb-nodes', 8)));
+  const bytes  = Math.max(1, Math.round(value('fb-bytes', 8)));
+  const target = value('fb-target', 1000);
+
+  // Protocol parameters: [minCycleUs, frameOverheadBytes, speedMbps, jitterUs]
+  const params = {
+    ethercat:    { min: 62,   overhead: 64,  speed: 100, jitter: 1  },
+    profinet_rt: { min: 250,  overhead: 64,  speed: 100, jitter: 10 },
+    profinet_irt:{ min: 250,  overhead: 64,  speed: 100, jitter: 1  },
+    ethernetip:  { min: 1000, overhead: 80,  speed: 100, jitter: 20 },
+    powerlink:   { min: 200,  overhead: 60,  speed: 100, jitter: 1  },
+    canopen:     { min: 1000, overhead: 11,  speed: 1,   jitter: 50 },
+  };
+
+  const p = params[proto] || params.ethercat;
+  // EtherCAT: one frame traverses all nodes (frame size grows with nodes)
+  // Other Ethernet: one frame per node
+  let frameSizeBits, txTimeUs;
+  if(proto === 'ethercat' || proto === 'powerlink'){
+    frameSizeBits = (p.overhead + nodes * bytes) * 8;
+    txTimeUs = frameSizeBits / (p.speed * 1000) + nodes * 0.1; // 0.1µs per node propagation
+  } else if(proto === 'canopen'){
+    frameSizeBits = (p.overhead + bytes) * 8;
+    txTimeUs = frameSizeBits / (p.speed * 1000) * nodes + nodes * 5; // polling, 5µs processing each
+  } else {
+    frameSizeBits = (p.overhead + bytes) * 8;
+    txTimeUs = (frameSizeBits / (p.speed * 1000)) * nodes + nodes * 2;
+  }
+
+  const minCycle = Math.max(p.min, Math.ceil(txTimeUs / p.min) * p.min);
+  const util = Math.min(txTimeUs / target * 100, 999);
+  const maxNodes = txTimeUs > 0 ? Math.max(1, Math.floor((target - p.min * 0.5) / (txTimeUs / nodes))) : nodes;
+
+  document.getElementById('fb-cycle').textContent     = formatNumber(minCycle, 0);
+  document.getElementById('fb-util').textContent      = formatNumber(util, 1);
+  document.getElementById('fb-maxnodes').textContent  = formatNumber(maxNodes, 0);
+
+  const chk = document.getElementById('fb-check');
+  if(target >= minCycle * 2){
+    chk.textContent = 'Target cycle feasible with margin'; chk.className = 'badge badge-ok';
+  } else if(target >= minCycle){
+    chk.textContent = 'Target cycle tight — verify with vendor'; chk.className = 'badge badge-warn';
+  } else {
+    chk.textContent = 'Target cycle not achievable — reduce nodes or bytes'; chk.className = 'badge badge-err';
+  }
+}
+
+/* ── 04 SAFETY SIL / PFD ─────────────────────────────────── */
+function calcSIL(){
+  const arch   = document.getElementById('sil-arch').value;
+  const lambda = value('sil-lambda', 1e-6);
+  const dc     = value('sil-dc', 90) / 100;
+  const t1h    = value('sil-proof', 1) * 8760; // years → hours
+  const beta   = value('sil-beta', 2) / 100;
+
+  // Dangerous undetected failure rate
+  const lambdaDU = lambda * (1 - dc);
+
+  let pfd;
+  // IEC 62061 simplified PFD formulas
+  if(arch === '1oo1'){
+    pfd = lambdaDU * t1h / 2;
+  } else if(arch === '1oo2'){
+    // PFD_1oo2 = beta*lambdaDU*T1/2 + (1-beta)^2 * lambdaDU^2 * T1^2 / 3
+    pfd = beta * lambdaDU * t1h / 2 + Math.pow(1 - beta, 2) * Math.pow(lambdaDU, 2) * Math.pow(t1h, 2) / 3;
+  } else if(arch === '2oo2'){
+    pfd = 2 * lambdaDU * t1h / 2;
+  } else { // 2oo3
+    pfd = 3 * Math.pow(lambdaDU * t1h / 2, 2) * (1 - beta) + beta * lambdaDU * t1h / 2;
+  }
+
+  const rrf = pfd > 0 ? 1 / pfd : Infinity;
+
+  // SIL bands (IEC 61508 low demand mode)
+  let silLevel, silText;
+  if(pfd < 1e-4){ silLevel = 4; silText = 'SIL 4'; }
+  else if(pfd < 1e-3){ silLevel = 3; silText = 'SIL 3'; }
+  else if(pfd < 1e-2){ silLevel = 2; silText = 'SIL 2'; }
+  else if(pfd < 0.1) { silLevel = 1; silText = 'SIL 1'; }
+  else { silLevel = 0; silText = 'Below SIL 1'; }
+
+  // Scientific notation for PFD
+  const pfdExp  = pfd > 0 ? Math.floor(Math.log10(pfd)) : 0;
+  const pfdMant = pfd > 0 ? pfd / Math.pow(10, pfdExp) : 0;
+  const pfdStr  = pfd > 0 ? formatNumber(pfdMant, 2) + ' × 10^' + pfdExp : '—';
+
+  document.getElementById('sil-pfd').textContent   = pfdStr;
+  document.getElementById('sil-level').textContent = silText;
+  document.getElementById('sil-rrf').textContent   = rrf > 1e7 ? '>10,000,000' : formatNumber(Math.round(rrf), 0);
+
+  const chk = document.getElementById('sil-check');
+  if(silLevel >= 2){
+    chk.textContent = silText + ' achieved — verify HFT and SFF'; chk.className = 'badge badge-ok';
+  } else if(silLevel === 1){
+    chk.textContent = 'SIL 1 only — review architecture or T1'; chk.className = 'badge badge-warn';
+  } else {
+    chk.textContent = 'Below SIL 1 — redesign required'; chk.className = 'badge badge-err';
+  }
+}
+
+
+calcPneum();
+calcElectr();
+calcHydro();
+calcBallscrew();
+calcPump();
+calcPDrop();
+calcKv();
+calcAccum();
+calcIO();
+calcServo();
+calcFieldbus();
+calcSIL();
+
+</script>
+
+<script>
+(function(){
+  const nav = document.getElementById('navWrap');
+  const burger = document.getElementById('navBurger');
+  const navLinks = document.getElementById('navLinks');
+  if (!burger || !navLinks) return;
+  burger.addEventListener('click', function(){
+    const open = navLinks.classList.toggle('open');
+    burger.setAttribute('aria-expanded', String(open));
+  });
+  navLinks.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      navLinks.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    });
+  });
+  document.addEventListener('click', function(event){
+    if (nav && !nav.contains(event.target)) {
+      navLinks.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

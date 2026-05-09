@@ -1,0 +1,7 @@
+Formspree endpoint: https://formspree.io/f/xdayjynd
+Selection sync patch v2: selector click now updates both "Selected above" and the Application Description intro immediately, without requiring Continue to application. The generated intro is replaced on later selector changes while preserving any user-written text below it.
+index.html: no configured sensitive/placeholder matches
+privacy.html: no configured sensitive/placeholder matches
+script.js: no configured sensitive/placeholder matches
+styles.css: no configured sensitive/placeholder matches
+site.webmanifest: no configured sensitive/placeholder matches
